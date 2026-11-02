@@ -21,6 +21,8 @@
     </div>
 </div>
 
+<button id="secret-btn" onclick="app.toggleTheme()"></button>
+
 <!-- 원본 이미지 팝업 모달 -->
 <div id="image-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; cursor: zoom-out;" onclick="this.style.display='none'">
     <img id="modal-img" style="max-width: 95%; max-height: 95%; border-radius: 8px; box-shadow: 0 0 30px rgba(0,0,0,0.8);">
@@ -35,7 +37,7 @@
             <div class="start-sidebar">
                 <div class="settings-box">
                     <h3>학습 현황</h3>
-                    <!-- 상시 노출: 전체 통합 통계 -->
+                    <!-- 상시 노출: 카테고리 전체 통합 통계 -->
                     <div id="global-stat-container" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #bae6fd;">
                         <label style="font-weight: bold; font-size: 0.95em; color: #0369a1;">전체 통합 숙지율</label>
                         <div class="lr-bar-container"><div id="global-learning-rate-bar" class="lr-bar"></div></div>
@@ -62,13 +64,19 @@
                     <div id="mobile-progress-btn-container" class="mobile-only" style="margin-top: 15px;">
                         <button class="btn btn-outline" style="margin-top: 0; padding: 10px;" onclick="app.showProgressScreen()">전체 과목별 현황 보기</button>
                     </div>
-                </div>
-            </div>
+                </div>            </div>
 
             <!-- 메인: 주요 액션 -->
             <div class="start-main">
                 <div class="top-action-bar">
                     <div class="selector-group">
+                        <div class="selector-box">
+                            <label>분류</label>
+                            <select id="category-select" onchange="app.onCategoryChange()">
+                                <option value="ASCPi">ASCPi</option>
+                                <option value="내신">내신 (GPA)</option>
+                            </select>
+                        </div>
                         <div class="selector-box">
                             <label>과목</label>
                             <select id="subject-select" onchange="app.onSubjectChange()"></select>
@@ -97,7 +105,8 @@
                         <h3>실전 모의고사</h3>
                         <p style="font-size: 0.9em; color: #065f46; margin-bottom: 15px; line-height: 1.5;">학습을 마무리하며 실전 감각을 극대화하세요. (100문항, 150분 권장)</p>
                         <div class="sim-btn-group">
-                            <button class="btn btn-primary sim-btn" onclick="app.startSimulation('random')">무작위 실전 모의고사 (등록 과목 전체 반영)</button>
+                            <button class="btn btn-primary sim-btn" onclick="app.startSimulation('fixed')">모의고사 1회 (Self-Assessment)</button>
+                            <button class="btn btn-outline sim-btn" onclick="app.startSimulation('random')">무작위 실전 모의고사 (과목별 비율 반영)</button>
                         </div>
                     </div>
                 </div>

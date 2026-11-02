@@ -107,19 +107,20 @@ h1, h2, h3 { text-align: center; color: #0369a1; font-weight: 800; margin-bottom
 .btn-outline:hover { background: #f0f9ff; border-color: #38bdf8; }
 .btn-small { padding: 4px 8px; font-size: 0.85em; width: auto; }
 
-/* 상단 액션 바 (과목 선택 + 검색, 북마크, 오답) */
+/* 상단 액션 바 (분류, 과목 + 검색, 북마크) */
 .top-action-bar { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
 .main-buttons { display: flex; gap: 10px; }
 .main-buttons .btn { margin-top: 0; flex: 1; }
 
-@media (min-width: 900px) {
+@media (min-width: 1100px) {
     .top-action-bar { flex-direction: row; align-items: flex-end; justify-content: space-between; }
-    .top-action-bar .selector-group { margin-bottom: 0; flex: 1; max-width: 400px; }
+    .top-action-bar .selector-group { margin-bottom: 0; flex: 2; }
     .main-buttons { flex: 1; justify-content: flex-end; }
 }
 
 /* 입력창 및 선택창 */
 .selector-group { display: flex; gap: 10px; margin-bottom: 20px; }
+@media (max-width: 600px) { .selector-group { flex-direction: column; } }
 .selector-box { flex: 1; }
 .selector-box label { font-weight: bold; display: block; margin-bottom: 5px; color: #0369a1; font-size: 0.9em; }
 select, input[type="text"], input[type="number"] { 
@@ -198,6 +199,10 @@ select:focus, input:focus { border-color: #38bdf8; outline: none; }
     border: 1px solid rgba(255,255,255,0.3) !important;
 }
 
+#fixed-back-btn { 
+    border: 1px solid rgba(255,255,255,0.3) !important;
+}
+
 @media (max-width: 480px) {
     #fixed-back-btn {
         top: 10px !important;
@@ -238,6 +243,42 @@ select:focus, input:focus { border-color: #38bdf8; outline: none; }
 .omr-opt:hover { border-color: #38bdf8; background: #f0f9ff; }
 .omr-opt.selected { background: #38bdf8; color: white; border-color: #38bdf8; }
 
+/* 대학 테마 대응 */
+body.yonsei-theme .omr-toggle { background: #003876; }
+body.yonsei-theme .omr-opt.selected { background: #003876; border-color: #003876; }
+body.yonsei-theme .omr-num:hover { color: #003876; }
+
+body.korea-theme .omr-toggle { background: #820024; }
+body.korea-theme .omr-opt.selected { background: #820024; border-color: #820024; }
+body.korea-theme .omr-num:hover { color: #820024; }
+
+#secret-btn { position: fixed; bottom: 15px; right: 15px; width: 30px; height: 30px; background: transparent; border: none; cursor: pointer; opacity: 0.05; z-index: 9999; }
+
+/* 연세 테마 (Easter Egg) */
+body.yonsei-theme { background-image: url('../images/yonsei_bg.png'); background-color: #00205B; background-size: cover; color: #00205B; }
+body.yonsei-theme .container { border-color: #003876; box-shadow: 0 8px 30px rgba(0, 56, 118, 0.2); }
+body.yonsei-theme h1, body.yonsei-theme h2, body.yonsei-theme h3, body.yonsei-theme .selector-box label { color: #003876; }
+body.yonsei-theme .btn-primary { background: #003876; } body.yonsei-theme .btn-primary:hover { background: #0050a0; }
+body.yonsei-theme .btn-outline { border-color: #003876; color: #003876; } body.yonsei-theme .btn-outline:hover { background: #003876; color: #fff; }
+body.yonsei-theme .settings-box { background: #f0f4f8; border-color: #cbd5e1; }
+body.yonsei-theme .lr-bar-container { background: #e2e8f0; }
+body.yonsei-theme .lr-bar { background: #003876; }
+body.yonsei-theme .page-btn.active { background: #003876; border-color: #003876; }
+body.yonsei-theme .option-btn.selected { background: #003876; border-color: #003876; }
+
+/* 고려 테마 (Easter Egg) */
+body.korea-theme { background-image: url('../images/korea_bg.png'); background-color: #820024; background-size: cover; color: #4a0011; }
+body.korea-theme .container { border-color: #820024; box-shadow: 0 8px 30px rgba(130, 0, 36, 0.2); }
+body.korea-theme h1, body.korea-theme h2, body.korea-theme h3, body.korea-theme .selector-box label { color: #820024; }
+body.korea-theme .btn-primary { background: #820024; } body.korea-theme .btn-primary:hover { background: #5a0018; }
+body.korea-theme .btn-outline { border-color: #820024; color: #820024; } body.korea-theme .btn-outline:hover { background: #820024; color: #fff; }
+body.korea-theme .settings-box { background: #fff1f2; border-color: #fecaca; }
+body.korea-theme .lr-bar-container { background: #ffe4e6; }
+body.korea-theme .lr-bar { background: #820024; }
+body.korea-theme .page-btn.active { background: #820024; border-color: #820024; }
+body.korea-theme .option-btn.selected { background: #820024; border-color: #820024; }
+
+/* New Start Screen Layout Classes */
 .quiz-btn-group { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 20px; }
 @media (min-width: 600px) { .quiz-btn-group { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 900px) { .quiz-btn-group { grid-template-columns: 1fr 1fr 1fr; } }
