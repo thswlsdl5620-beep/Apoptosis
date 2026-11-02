@@ -1,15 +1,9 @@
 const app = {
     SHEET_DATA: {
-        "ASCPi": {
-            "Hematology": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuHj_HvmwKjNLQFgJVo2AauHR5bqoBppnhijqepJ3Q4hnjPVHt3R2TDXzUGRyG8k8igkEAr8UwVMFI/pub?output=csv",
-            "Immunology": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRobSYYDi5NPFlkFr2g6si4oFsuaB822Ufq3DlGU0xBCKTFAxs-o8UZvJPWz-N9W5of84hFicaEpR0r/pub?output=csv",
-            "Immunohematology": "https://docs.google.com/spreadsheets/d/e/2PACX-1vSwgFtMq982lUFF602_gxZ99mzUSlLoSFiqHHmo4BMZCmF8Do9z25x_VfulSFLzxfYLEcG0wGkDWTTQ/pub?output=csv",
-            "Clinical Chemistry": "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSSEOW5QZtsgD4MG8H4sVhA4nG8NxZ7-BKxhYvdKQP_xmaD58Ecr_JKmEFl59a6-Pu9cn-w9KS106-/pub?output=csv",
-            "Urinalysis and body fluids": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLnu1ToQISYbnc0mnH26KWygYD8Jiq-oedwXgYcoC4LXTo7JtMwd132PZaT2hh7T-TCA9yh13-aWOW/pub?output=csv",
-            "microbiology": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRywHxs6B-70nxhM_UmDBJsIxW8oEsdkY0HeilZQaCEJU0FXUBZcgjDGRkRD3iUvFBmkRVwtashiQev/pub?output=csv",
-            "molecular diagnosis": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGlsxMbI0P0GTwsBAlFD-Lo7NN9sRTZz1adsAtKgtOQUOZUTL_IrqFkTsganU--U7rbVNMLkfbKzLZ/pub?output=csv",
-            "education and management": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRKaMQ4UBRtgIrmCIefOiHu6_6CkMqM-veGCWbFm-RtP3NMTUC2hRryPqw9QN0xwGFnYbTNjtZ3ZVei/pub?output=csv",
-            "photomicrograph and color plate examination": "https://docs.google.com/spreadsheets/d/e/2PACX-1vT7-7jZTBCDyltd_yrA_LEVUPGMaCzjeCZelirD0ywwdrKp5ciGnDu_UemH7sYJMyKr1_oghDmdl0Qw/pub?output=csv"
+        "의료기술직": {
+            "생명과학": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuHj_HvmwKjNLQFgJVo2AauHR5bqoBppnhijqepJ3Q4hnjPVHt3R2TDXzUGRyG8k8igkEAr8UwVMFI/pub?output=csv",
+            "공중보건": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRobSYYDi5NPFlkFr2g6si4oFsuaB822Ufq3DlGU0xBCKTFAxs-o8UZvJPWz-N9W5of84hFicaEpR0r/pub?output=csv",
+            "의료법규": "https://docs.google.com/spreadsheets/d/e/2PACX-1vSwgFtMq982lUFF602_gxZ99mzUSlLoSFiqHHmo4BMZCmF8Do9z25x_VfulSFLzxfYLEcG0wGkDWTTQ/pub?output=csv",
         },
         "Simulation": {
             "Self-Assessment": "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_HRXA4uhh3GanmWZxHsS7EDcJ_5qOf4g4yunwlT7jSfoJYLOo3dLAsDAdEruyjj9fD-0cLI5CMdNR/pub?output=csv"
