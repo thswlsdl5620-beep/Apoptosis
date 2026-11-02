@@ -1,26 +1,15 @@
 const app = {
-    SHEET_DATA: {
-        "ASCPi": {
-            "Hematology": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuHj_HvmwKjNLQFgJVo2AauHR5bqoBppnhijqepJ3Q4hnjPVHt3R2TDXzUGRyG8k8igkEAr8UwVMFI/pub?output=csv",
-            "Immunology": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRobSYYDi5NPFlkFr2g6si4oFsuaB822Ufq3DlGU0xBCKTFAxs-o8UZvJPWz-N9W5of84hFicaEpR0r/pub?output=csv",
-            "Immunohematology": "https://docs.google.com/spreadsheets/d/e/2PACX-1vSwgFtMq982lUFF602_gxZ99mzUSlLoSFiqHHmo4BMZCmF8Do9z25x_VfulSFLzxfYLEcG0wGkDWTTQ/pub?output=csv",
-            "Clinical Chemistry": "https://docs.google.com/spreadsheets/d/e/2PACX-1vSSSEOW5QZtsgD4MG8H4sVhA4nG8NxZ7-BKxhYvdKQP_xmaD58Ecr_JKmEFl59a6-Pu9cn-w9KS106-/pub?output=csv",
-            "Urinalysis and body fluids": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLnu1ToQISYbnc0mnH26KWygYD8Jiq-oedwXgYcoC4LXTo7JtMwd132PZaT2hh7T-TCA9yh13-aWOW/pub?output=csv",
-            "microbiology": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRywHxs6B-70nxhM_UmDBJsIxW8oEsdkY0HeilZQaCEJU0FXUBZcgjDGRkRD3iUvFBmkRVwtashiQev/pub?output=csv",
-            "molecular diagnosis": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGlsxMbI0P0GTwsBAlFD-Lo7NN9sRTZz1adsAtKgtOQUOZUTL_IrqFkTsganU--U7rbVNMLkfbKzLZ/pub?output=csv",
-            "education and management": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRKaMQ4UBRtgIrmCIefOiHu6_6CkMqM-veGCWbFm-RtP3NMTUC2hRryPqw9QN0xwGFnYbTNjtZ3ZVei/pub?output=csv",
-            "photomicrograph and color plate examination": "https://docs.google.com/spreadsheets/d/e/2PACX-1vT7-7jZTBCDyltd_yrA_LEVUPGMaCzjeCZelirD0ywwdrKp5ciGnDu_UemH7sYJMyKr1_oghDmdl0Qw/pub?output=csv"
-        },
-        "Simulation": {
-            "Self-Assessment": "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_HRXA4uhh3GanmWZxHsS7EDcJ_5qOf4g4yunwlT7jSfoJYLOo3dLAsDAdEruyjj9fD-0cLI5CMdNR/pub?output=csv"
-        },
-        "내신": {
-            "임상화학": "https://docs.google.com/spreadsheets/d/e/2PACX-1vR9G8mJqpsn9xWmhg_2LCAWbfi2vsZTxRdq77NStrnzYHG3HCfgpatnlFh1Y6gP0IblU3EVJMPYr6_0/pub?output=csv",
-            "microbiology": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRi7IJPlDMLLxuagUnmzUU31Gc2DeBCqP4reULDa4uzszkQ_SdDrd1d6Qy3ZozZPw/pub?output=csv",
-            "화학 2차": "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_2LL6ifjnUdal2YvKyw3dA2B7ru-aWfUQhQm4-J_3WIZq2zIzXrj65DtSzd4RJrJ1mJkyRt7A3gs-/pub?output=csv"
-        }
+    // =========================================================================
+    // [과목 및 구글 드라이브 문서 링크 설정]
+    // 과목명과 해당 구글 드라이브(스프레드시트) 링크를 아래에 입력하세요. (문서 하나 = 과목 하나)
+    // =========================================================================
+    SUBJECT_SHEETS: {
+        "과목 1": "여기에 드라이브 링크를 붙여넣으세요",
+        // "과목 2": "여기에 드라이브 링크를 붙여넣으세요",
+        // "과목 3": "여기에 드라이브 링크를 붙여넣으세요",
     },
-    currentCategory: "ASCPi", currentSubject: "ALL",
+
+    currentSubject: "ALL",
     allQuizData: [], currentQuizPool: [], studyPool: [],
     learningProgress: {}, bookmarks: {},
     currentMode: "", itemsPerPage: 2, currentPage: 0,
@@ -56,11 +45,10 @@ const app = {
             btn.style.display = shouldShow ? "block" : "none";
         });
 
-        this.loadTheme();
         this.loadStorageData();
-        $("category-select").value = this.currentCategory;
         this.showScreen("start-screen");
-        this.onCategoryChange();
+        this.populateSubjectSelect();
+        this.fetchAllSubjectsData();
     },
 
     updateItemsPerPage() {
@@ -80,25 +68,59 @@ const app = {
     saveProgress() { localStorage.setItem("clinical_learning_progress", JSON.stringify(this.learningProgress)); },
     saveBookmarks() { localStorage.setItem("clinical_bookmarks", JSON.stringify(this.bookmarks)); },
 
-    onCategoryChange() {
-        this.currentCategory = $("category-select").value;
-        const subjects = Object.keys(this.SHEET_DATA[this.currentCategory]);
+    populateSubjectSelect() {
         const sel = $("subject-select");
+        if (!sel) return;
         sel.innerHTML = "";
-        
-        const optAll = document.createElement("option");
-        optAll.value = "ALL"; optAll.innerText = "전체 과목 (통합)";
-        sel.appendChild(optAll);
+
+        const subjects = Object.keys(this.SUBJECT_SHEETS);
+
+        if (subjects.length === 0) {
+            const optNone = document.createElement("option");
+            optNone.value = "";
+            optNone.innerText = "등록된 과목 없음";
+            sel.appendChild(optNone);
+            this.currentSubject = "";
+            return;
+        }
+
+        if (subjects.length > 1) {
+            const optAll = document.createElement("option");
+            optAll.value = "ALL";
+            optAll.innerText = "전체 과목 (통합)";
+            sel.appendChild(optAll);
+        }
 
         subjects.forEach(sub => {
-            const o = document.createElement("option");
-            o.value = sub; o.innerText = sub;
-            sel.appendChild(o);
+            const opt = document.createElement("option");
+            opt.value = sub;
+            opt.innerText = sub;
+            sel.appendChild(opt);
         });
 
-        this.fetchAllCategoryData().then(() => {
-            this.currentSubject = "ALL";
-            sel.value = "ALL";
+        if (this.currentSubject !== "ALL" && !this.SUBJECT_SHEETS[this.currentSubject]) {
+            this.currentSubject = subjects.length > 1 ? "ALL" : subjects[0];
+        }
+        sel.value = this.currentSubject;
+    },
+
+    onSubjectChange() {
+        this.currentSubject = $("subject-select").value || "";
+        $("display-subject-name").innerText = (this.currentSubject === "ALL" || !this.currentSubject) ? "전체 통합" : this.currentSubject;
+        this.updateDashboardUI();
+    },
+
+    fetchAllSubjectsData() {
+        const subjects = Object.keys(this.SUBJECT_SHEETS);
+        if (subjects.length === 0) {
+            this.allQuizData = [];
+            this.updateDashboardUI();
+            return Promise.resolve();
+        }
+
+        const promises = subjects.map(sub => this.fetchSubjectData(sub));
+        return Promise.all(promises).then(results => {
+            this.allQuizData = results.flat();
             this.updateDashboardUI();
         }).catch(err => {
             console.error("데이터 로딩 실패:", err);
@@ -106,24 +128,14 @@ const app = {
         });
     },
 
-    fetchAllCategoryData() {
-        const subjects = Object.keys(this.SHEET_DATA[this.currentCategory]);
-        const promises = subjects.map(sub => this.fetchSubjectData(sub));
-        return Promise.all(promises).then(results => {
-            this.allQuizData = results.flat();
-        });
-    },
-
-    onSubjectChange() {
-        this.currentSubject = $("subject-select").value;
-        $("display-subject-name").innerText = this.currentSubject === "ALL" ? "전체 통합" : this.currentSubject;
-        this.updateDashboardUI();
-    },
-
     fetchSubjectData(subject) {
         return new Promise((resolve) => {
-            const url = this.SHEET_DATA[this.currentCategory][subject];
-            if (!url) return resolve([]);
+            let rawUrl = this.SUBJECT_SHEETS[subject];
+            if (!rawUrl || rawUrl.includes("여기에 드라이브 링크를 붙여넣으세요")) {
+                return resolve([]);
+            }
+
+            const url = formatGoogleSheetUrl(rawUrl);
             Papa.parse(url, {
                 download: true, header: true, skipEmptyLines: true,
                 transformHeader: h => h.trim(),
@@ -197,7 +209,7 @@ const app = {
         $("global-learning-rate-bar").style.width = globalRate + "%";
 
         // 2. 조건부 UI 노출 제어
-        if (this.currentSubject === "ALL") {
+        if (this.currentSubject === "ALL" || !this.currentSubject) {
             $("current-subject-stat").style.display = "none";
             $("pc-subject-list-container").style.display = "block";
             const mobileBtn = $("mobile-progress-btn-container");
@@ -236,7 +248,11 @@ const app = {
         if (!container) return;
         container.innerHTML = "";
         
-        const subjects = Object.keys(this.SHEET_DATA[this.currentCategory]);
+        const subjects = Object.keys(this.SUBJECT_SHEETS);
+        if (subjects.length === 0) {
+            container.innerHTML = "<div style='color: #94a3b8; font-size: 0.85em; text-align: center; padding: 15px;'>등록된 과목이 없습니다.</div>";
+            return;
+        }
         
         const renderItem = (name, correct, total) => {
             const rate = total === 0 ? 0 : Math.round((correct / total) * 100);
@@ -270,7 +286,7 @@ const app = {
     },
 
     showWrongNoteScreen() {
-        const filter = this.currentSubject === "ALL" ? "전체" : this.currentSubject;
+        const filter = (this.currentSubject === "ALL" || !this.currentSubject) ? "전체" : this.currentSubject;
         this.currentWrongFilter = filter;
         this.filteredWrongList = [];
         
@@ -284,7 +300,7 @@ const app = {
         };
 
         if (filter === "전체") {
-            const subjects = Object.keys(this.SHEET_DATA[this.currentCategory]);
+            const subjects = Object.keys(this.SUBJECT_SHEETS);
             subjects.forEach(sub => collectFromSubject(sub));
         } else {
             collectFromSubject(filter);
@@ -516,7 +532,7 @@ const app = {
     executeSearch() {
         const kw = $("full-search-input").value.toLowerCase().trim();
         if (kw.length < 2) return;
-        const pool = this.currentSubject === "ALL"
+        const pool = (this.currentSubject === "ALL" || !this.currentSubject)
             ? this.allQuizData
             : this.allQuizData.filter(q => q['_subject'] === this.currentSubject);
         this.searchResults = pool.filter(q => q['문제'].toLowerCase().includes(kw) || (q['해설'] && q['해설'].toLowerCase().includes(kw)));
@@ -567,12 +583,14 @@ const app = {
     },
 
     startQuiz(mode) {
-        if (this.allQuizData.length === 0) return alert("문제가 로드되지 않았습니다.");
+        if (this.allQuizData.length === 0) return alert("문제가 로드되지 않았습니다. app.js 코드의 SUBJECT_SHEETS에 드라이브 링크를 확인해주세요.");
         this.currentMode = mode;
         
-        let pool = this.currentSubject === "ALL" 
+        let pool = (this.currentSubject === "ALL" || !this.currentSubject)
             ? this.allQuizData 
             : this.allQuizData.filter(q => q['_subject'] === this.currentSubject);
+
+        if (pool.length === 0) return alert("선택된 과목에 문항이 없습니다.");
 
         let count = Math.min(parseInt($("question-count").value) || 10, pool.length);
         this.currentQuizPool = [...pool].sort(() => Math.random() - 0.5).slice(0, count);
@@ -689,6 +707,7 @@ const app = {
 
     updateLearningRate(q, isCorrect) {
         const sub = q['_subject'] || this.currentSubject;
+        if (!sub) return;
         if (!this.learningProgress[sub]) this.learningProgress[sub] = {};
         this.learningProgress[sub][q['문제']] = isCorrect;
         this.saveProgress();
@@ -766,8 +785,8 @@ const app = {
     },
 
     startReviewMode() {
-        if (this.allQuizData.length === 0) return alert("문제가 로드되지 않았습니다.");
-        this.studyPool = this.currentSubject === "ALL"
+        if (this.allQuizData.length === 0) return alert("문제가 로드되지 않았습니다. app.js 코드의 SUBJECT_SHEETS에 드라이브 링크를 확인해주세요.");
+        this.studyPool = (this.currentSubject === "ALL" || !this.currentSubject)
             ? this.allQuizData
             : this.allQuizData.filter(q => q['_subject'] === this.currentSubject);
         if (this.studyPool.length === 0) return alert("선택한 과목에 문제가 없습니다.");
@@ -778,46 +797,12 @@ const app = {
     },
 
     startSimulation(type) {
-        if (type === 'fixed') {
-            const url = this.SHEET_DATA["Simulation"]["Self-Assessment"];
-            this.currentMode = "exam"; this.currentSubject = "Mock Exam 1";
-            Papa.parse(url, {
-                download: true, header: true, skipEmptyLines: true, transformHeader: h => h.trim(),
-                complete: (results) => {
-                    this.currentQuizPool = results.data.map(row => {
-                        const n = {};
-                        for (const k in row) {
-                            const nk = k.trim().replace(/^보기([a-e])$/i, (_, c) => '보기' + c.toUpperCase());
-                            n[nk] = (row[k] || '').trim();
-                        }
-                        n['_subject'] = "Self-Assessment";
-                        return n;
-                    }).filter(row => row['문제']);
-                    if (this.currentQuizPool.length === 0) return alert("시뮬레이션 데이터를 불러오지 못했습니다.");
-                    this.launchQuiz();
-                }
-            });
-        } else if (type === 'random') {
-            const BLUEPRINT = { "Hematology": 18, "Immunology": 10, "Immunohematology": 18, "Clinical Chemistry": 18, "microbiology": 18, "Urinalysis and body fluids": 6, "molecular diagnosis": 6, "education and management": 3, "photomicrograph and color plate examination": 3 };
-            this.currentMode = "exam"; this.currentSubject = "Random Mock Exam";
-            const subjects = Object.keys(this.SHEET_DATA["ASCPi"]);
-            const promises = subjects.map(sub => this.fetchSubjectData(sub));
-            Promise.all(promises).then(results => {
-                let pool = [];
-                results.forEach((data, idx) => {
-                    const subName = subjects[idx];
-                    const targetCount = BLUEPRINT[subName] || 0;
-                    const shuffled = data.sort(() => 0.5 - Math.random());
-                    pool = pool.concat(shuffled.slice(0, targetCount));
-                });
-                if (pool.length < 100) {
-                    const remaining = results.flat().filter(q => !pool.includes(q)).sort(() => 0.5 - Math.random());
-                    pool = pool.concat(remaining.slice(0, 100 - pool.length));
-                }
-                this.currentQuizPool = pool.sort(() => 0.5 - Math.random());
-                this.launchQuiz();
-            });
-        }
+        if (this.allQuizData.length === 0) return alert("문제가 로드되지 않았습니다. app.js 코드의 SUBJECT_SHEETS에 드라이브 링크를 확인해주세요.");
+        this.currentMode = "exam";
+        this.currentSubject = "Mock Exam";
+        const count = Math.min(100, this.allQuizData.length);
+        this.currentQuizPool = [...this.allQuizData].sort(() => 0.5 - Math.random()).slice(0, count);
+        this.launchQuiz();
     },
 
     renderStudyPage() {
@@ -864,37 +849,7 @@ const app = {
         c.appendChild(next);
     },
 
-    goHome() { this.updateDashboardUI(); this.showScreen("start-screen"); window.scrollTo(0, 0); },
-
-    toggleTheme() {
-        const b = document.body;
-        if (b.classList.contains("yonsei-theme")) {
-            b.classList.remove("yonsei-theme"); b.classList.add("korea-theme");
-            $("main-title").innerText = "Korea Univ. Med-Lab Portal";
-            localStorage.setItem("theme", "korea");
-        } else if (b.classList.contains("korea-theme")) {
-            b.classList.remove("korea-theme");
-            $("main-title").innerText = "CLST";
-            localStorage.setItem("theme", "default");
-        } else {
-            b.classList.add("yonsei-theme");
-            $("main-title").innerText = "Yonsei Univ. Med-Lab Portal";
-            localStorage.setItem("theme", "yonsei");
-        }
-    },
-
-    loadTheme() { 
-        const t = localStorage.getItem("theme");
-        if (t === "yonsei") {
-            document.body.classList.add("yonsei-theme");
-            $("main-title").innerText = "Yonsei Univ. Med-Lab Portal";
-        } else if (t === "korea") {
-            document.body.classList.add("korea-theme");
-            $("main-title").innerText = "Korea Univ. Med-Lab Portal";
-        } else {
-            $("main-title").innerText = "CLST";
-        }
-    }
+    goHome() { this.updateDashboardUI(); this.showScreen("start-screen"); window.scrollTo(0, 0); }
 };
 
 document.addEventListener("keydown", (e) => {
