@@ -8,7 +8,6 @@ const app = {
         // "과목 2": "여기에 드라이브 링크를 붙여넣으세요",
         // "과목 3": "여기에 드라이브 링크를 붙여넣으세요",
     },
-
     currentSubject: "ALL",
     allQuizData: [], currentQuizPool: [], studyPool: [],
     learningProgress: {}, bookmarks: {},
